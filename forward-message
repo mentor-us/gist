@@ -1,0 +1,25 @@
+@startuml
+
+actor User
+participant MobileApp
+participant BackendSocket
+database Database
+participant NotificationService
+
+User -> MobileApp: Select message to forward
+activate User
+MobileApp -> MobileApp: Display forward options
+MobileApp -> User: Choose recipient
+User -> MobileApp: Confirm recipient
+MobileApp -> BackendSocket: Forward message request
+activate BackendSocket
+BackendSocket -> Database: Duplicate message record
+Database --> BackendSocket: Confirm duplication
+BackendSocket -> NotificationService: Send notification to recipient
+NotificationService --> MobileApp: Display notification
+BackendSocket --> MobileApp: Forward confirmation
+deactivate BackendSocket
+MobileApp --> User: Display success message
+deactivate User
+
+@enduml
